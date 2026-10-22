@@ -1,37 +1,45 @@
-name: Python CI Pipeline
+name: Validate Code
 
-# Trigger automatically when a Pull Request is opened or updated targeting main
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - 'feature/**'
+      - 'topic/**'
+      - 'fix/**'
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  validate-code:
+  validate:
+    name: Lint, Format & Scan
     runs-on: ubuntu-latest
-    
+
     steps:
-      # 1. Checkout the specific commit SHA of the Pull Request branch
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for Gitleaks to scan full commit history
 
-      # 2. Set up the Python runtime environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip' # Speeds up dependency installation across runs
+          python-version: '3.10'
 
-      # 3. Run Static Code Analysis (Flake8)
-      - name: Run Flake8 Linter
+      - name: Install Quality & Security Tools
         run: |
-          pip install --upgrade pip
-          pip install flake8
-          # Run flake8 across the python project directory
-          flake8 .
+          python -m pip install --upgrade pip
+          pip install flake8 black isort
 
-      # 4. Run Secret Scanning (Gitleaks Community Action)
-      - name: Run Gitleaks Secret Scan
+      - name: Run Black (Formatter Check)
+        run: black --check src/
+
+      - name: Run Isort (Import Sorting Check)
+        run: isort --check-only src/
+
+      - name: Run Flake8 (Linter)
+        run: flake8 src/
+
+      - name: Run Gitleaks (Secret Scanning)
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
