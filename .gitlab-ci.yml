@@ -1,7 +1,7 @@
 stages:
   - test
 
-flake8_lint:
+flake8_linter:
   stage: test
   image: python:3.11-slim
   before_script:
