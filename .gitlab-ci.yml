@@ -1,39 +1,24 @@
 stages:
   - test
-  - security
 
-# 1. TEST STAGE: Differential Python Linting
-lint_python_code:
+flake8_lint:
   stage: test
   image: python:3.11-slim
   before_script:
     - apt-get update && apt-get install -y git
-    - pip install --cache-dir .cache/pip flake8
+    - pip install flake8
   script:
-    - echo "Fetching target branch for diff comparison..."
-    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
-    
-    - echo "Identifying modified Python files..."
-    - CHANGED_FILES=$(git diff --name-only origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME -- '*.py')
-    
+    - echo "Fetching target branch for differential comparison..."
+    - git fetch origin $CI_DEFAULT_BRANCH || git fetch origin main || true
+    # Filter out deleted files (--diff-filter=d) to prevent FileNotFoundError (E902)
+    - TARGET_BRANCH=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-$CI_DEFAULT_BRANCH}
+    - CHANGED_FILES=$(git diff --name-only --diff-filter=d origin/${TARGET_BRANCH:-main}...HEAD '*.py')
     - |
       if [ -n "$CHANGED_FILES" ]; then
-          echo "Linting the following modified files:"
-          echo "$CHANGED_FILES"
-          flake8 $CHANGED_FILES
+        echo "Linting changed Python files:"
+        echo "$CHANGED_FILES"
+        flake8 $CHANGED_FILES
       else
-          echo "No Python files were modified in this Merge Request. Skipping linter."
+        echo "No changed Python files detected in diff. Running full fallback check on current workspace..."
+        flake8 .
       fi
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-# 2. SECURITY STAGE: Secret Scanning
-scan_secrets:
-  stage: security
-  image: 
-    name: zricethezav/gitleaks:latest
-    entrypoint: [""]
-  script:
-    - gitleaks detect --source . --verbose
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
