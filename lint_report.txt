@@ -1,0 +1,9 @@
+./src/account-creation.py:3:1: F401 'typing.Optional' imported but unused
+./src/authentication.py:1:6: E999 SyntaxError: invalid syntax
+./src/autotheme-logic.py:1:2: E999 SyntaxError: invalid syntax
+./src/categ.py:11:9: W503 line break before binary operator
+./src/categ.py:12:9: W503 line break before binary operator
+./src/deny-logic.py:11:9: W503 line break before binary operator
+./src/deny-logic.py:12:9: W503 line break before binary operator
+./src/discount-logic.py:1:1: F401 'datetime.datetime' imported but unused
+./src/integration-logic.py:1:6: E999 SyntaxError: invalid syntax
