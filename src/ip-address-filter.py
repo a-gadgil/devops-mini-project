@@ -12,6 +12,7 @@ BLOCKED_NETWORKS = [
     ipaddress.ip_network("45.33.0.0/16"),
 ]
 
+
 def is_ip_blocked(client_ip_str: str) -> bool:
     """
     Checks if a given IP address string is blocked.
@@ -32,6 +33,7 @@ def is_ip_blocked(client_ip_str: str) -> bool:
             return True
 
     return False
+
 
 # --- Example Usage ---
 requests = ["192.168.1.100", "198.51.100.22", "8.8.8.8"]

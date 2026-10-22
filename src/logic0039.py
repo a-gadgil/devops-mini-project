@@ -1,5 +1,6 @@
 import time
 
+
 class QuickCommerceCart:
     def __init__(self, reservation_ttl: int = 300):
         self.reservation_ttl = reservation_ttl  # Expiration time in seconds (300s)
@@ -11,15 +12,17 @@ class QuickCommerceCart:
         # Start timer when the first item is added
         if not self.cart_items:
             self.created_at = time.time()
-            
-        self.cart_items.append({"item": item_name, "quantity": quantity, "price": price})
+
+        self.cart_items.append(
+            {"item": item_name, "quantity": quantity, "price": price}
+        )
         print(f"Added '{item_name}' to cart.")
 
     def is_expired(self) -> bool:
         """Checks if the 300-second window has passed."""
         if not self.created_at:
             return False
-        
+
         elapsed_time = time.time() - self.created_at
         return elapsed_time > self.reservation_ttl
 
@@ -28,7 +31,7 @@ class QuickCommerceCart:
         if self.is_expired():
             self._clear_cart("Cart expired! Items discarded due to 300s timeout.")
             return []
-        
+
         remaining = int(self.reservation_ttl - (time.time() - self.created_at))
         print(f"Cart Active. Time remaining to checkout: {remaining}s")
         return self.cart_items
@@ -38,7 +41,7 @@ class QuickCommerceCart:
         if self.is_expired():
             self._clear_cart("Checkout failed: Reservation window expired.")
             return False
-        
+
         if not self.cart_items:
             print("Checkout failed: Cart is empty.")
             return False

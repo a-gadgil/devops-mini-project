@@ -12,21 +12,25 @@ CATALOG_BY_REGION = {
     },
 }
 
+
 def get_localized_storefront(customer_state: str):
     """Fetches inventory and pricing tailored to the user's location."""
     # Standardize input string
     formatted_state = customer_state.title().strip()
-    
+
     # Check if region is served
     if formatted_state not in CATALOG_BY_REGION:
         return f"Sorry, service is not available in {customer_state} yet."
-    
+
     inventory = CATALOG_BY_REGION[formatted_state]
-    
+
     # Display available items
     print(f"\n--- Available Products in {formatted_state} ---")
     for item, details in inventory.items():
-        print(f"• {item}: ₹{details['price_per_kg']}/{details['unit']} (In Stock: {details['stock']})")
+        print(
+            f"• {item}: ₹{details['price_per_kg']}/{details['unit']} (In Stock: {details['stock']})"
+        )
+
 
 # Example usage
 get_localized_storefront("Maharashtra")

@@ -26,7 +26,7 @@ class InventorySync:
             "reserved_stock": reserved_stock,
             "available_stock": available_stock,
             "status": status,
-            "is_orderable": status != "OUT_OF_STOCK"
+            "is_orderable": status != "OUT_OF_STOCK",
         }
 
     def sync_batch(self, stock_records):
@@ -36,9 +36,7 @@ class InventorySync:
         """
         return [
             self.sync_product(
-                r["product_id"],
-                r["physical_stock"],
-                r.get("reserved_stock", 0)
+                r["product_id"], r["physical_stock"], r.get("reserved_stock", 0)
             )
             for r in stock_records
         ]

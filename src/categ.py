@@ -6,11 +6,7 @@ def get_age_tier(dob: date) -> str:
     today = date.today()
 
     # Calculate exact age accounting for month/day
-    age = (
-        today.year
-        - dob.year
-        - ((today.month, today.day) < (dob.month, dob.day))
-    )
+    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
     # Classify into tiers
     if age <= 25:

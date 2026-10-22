@@ -36,14 +36,14 @@ class CheckoutService:
 
     VALID_COUPONS = {
         "WELCOME10": 0.10,  # 10% off
-        "FLAT100": 100.0,   # Flat 100 off
+        "FLAT100": 100.0,  # Flat 100 off
     }
 
     def validate_cart(self, cart: Cart) -> None:
         """Ensures cart is valid and items are available in stock."""
         if not cart.items:
             raise ValueError("Cart is empty.")
-        
+
         for item in cart.items:
             if not item.in_stock:
                 raise ValueError(f"Item '{item.name}' is currently out of stock.")
@@ -72,12 +72,14 @@ class CheckoutService:
         """Simulates payment gateway processing."""
         if amount <= 0:
             raise ValueError("Payment amount must be greater than zero.")
-        
+
         # Payment integration logic would go here (e.g., Stripe, Razorpay)
         print(f"Processing payment of ₹{amount:.2f} via {method.value}...")
         return True  # Simulating a successful transaction
 
-    def checkout(self, cart: Cart, shipping_address: str, payment_method: PaymentMethod) -> dict:
+    def checkout(
+        self, cart: Cart, shipping_address: str, payment_method: PaymentMethod
+    ) -> dict:
         """Executes the complete checkout flow."""
         # 1. Validation
         if not shipping_address.strip():
@@ -119,7 +121,7 @@ if __name__ == "__main__":
         Item(item_id="101", name="Wireless Mouse", price=450.0, quantity=1),
         Item(item_id="102", name="USB Cable", price=150.0, quantity=2),
     ]
-    
+
     user_cart = Cart(items=cart_items, coupon_code="WELCOME10")
     checkout_system = CheckoutService()
 

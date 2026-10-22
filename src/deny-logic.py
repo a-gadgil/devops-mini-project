@@ -6,11 +6,7 @@ def validate_account_creation(dob: date) -> bool:
     today = date.today()
 
     # Calculate exact age accounting for leap years and upcoming birthdays
-    age = (
-        today.year
-        - dob.year
-        - ((today.month, today.day) < (dob.month, dob.day))
-    )
+    age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
 
     if age < 18:
         raise ValueError(

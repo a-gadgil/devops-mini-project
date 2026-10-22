@@ -33,6 +33,5 @@ fare = calculate_taxi_fare(distance_km=12.5, time_of_day_hour=20, demand_level="
 print(f"Total Fare: ₹{fare}")  # Output: ₹417.6
 
 
-
 # End of file
 # Code will be tested in CI pipeline stage in Github Actions

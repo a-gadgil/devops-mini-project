@@ -51,9 +51,7 @@ def get_country_from_ip(ip_address: str) -> Optional[dict]:
         )
         return None
     except requests.RequestException as err:
-        logger.error(
-            f"Geolocation request failed for IP {ip_address}: {str(err)}"
-        )
+        logger.error(f"Geolocation request failed for IP {ip_address}: {str(err)}")
         return None
 
 

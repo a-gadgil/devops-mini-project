@@ -20,7 +20,7 @@ class UserSession:
     @staticmethod
     def _parse_os(user_agent_str: str) -> str:
         ua = user_agents.parse(user_agent_str)
-        
+
         if ua.is_android or "Android" in user_agent_str:
             return "android"
         elif ua.is_ios or any(x in user_agent_str for x in ["iPhone", "iPad", "iPod"]):
@@ -29,7 +29,7 @@ class UserSession:
             return "windows"
         elif "Linux" in ua.os.family or "Linux" in user_agent_str:
             return "linux"
-        
+
         return "unknown"
 
     def end_session(self) -> None:
@@ -50,7 +50,6 @@ class UserSession:
             "duration_seconds": duration,
             "os_platform": self.os_platform,
         }
-
 
 
 # End of file
