@@ -1,0 +1,34 @@
+# Define the sequential stages of the pipeline
+stages:
+  - test
+  - security
+
+# Default runtime image for jobs that require Python
+default:
+  image: python:3.11-slim
+
+# Cache python packages between pipeline runs to optimize speed
+cache:
+  paths:
+    - .cache/pip
+
+# 1. TEST STAGE: Static code analysis
+lint_python_code:
+  stage: test
+  before_script:
+    - pip install --cache-dir .cache/pip flake8
+  script:
+    - flake8 .
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"' # Runs specifically on MRs
+
+# 2. SECURITY STAGE: Secret scanning using the official Gitleaks image
+scan_secrets:
+  stage: security
+  image: 
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --source . --verbose
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
