@@ -1,6 +1,13 @@
+stages:
+  - test
+  - security
+
+# 1. TEST STAGE: Differential Python Linting
 lint_python_code:
   stage: test
+  image: python:3.11-slim
   before_script:
+    - apt-get update && apt-get install -y git
     - pip install --cache-dir .cache/pip flake8
   script:
     - echo "Fetching target branch for diff comparison..."
@@ -17,5 +24,16 @@ lint_python_code:
       else
           echo "No Python files were modified in this Merge Request. Skipping linter."
       fi
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+# 2. SECURITY STAGE: Secret Scanning
+scan_secrets:
+  stage: security
+  image: 
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --source . --verbose
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
