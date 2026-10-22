@@ -1,0 +1,24 @@
+stages:
+  - test
+
+flake8_linter:
+  stage: test
+  image: python:3.11-slim
+  before_script:
+    - apt-get update && apt-get install -y git
+    - pip install flake8
+  script:
+    - echo "Fetching target branch for differential comparison..."
+    - git fetch origin $CI_DEFAULT_BRANCH || git fetch origin main || true
+    # Filter out deleted files (--diff-filter=d) to prevent FileNotFoundError (E902)
+    - TARGET_BRANCH=${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-$CI_DEFAULT_BRANCH}
+    - CHANGED_FILES=$(git diff --name-only --diff-filter=d origin/${TARGET_BRANCH:-main}...HEAD '*.py')
+    - |
+      if [ -n "$CHANGED_FILES" ]; then
+        echo "Linting changed Python files:"
+        echo "$CHANGED_FILES"
+        flake8 $CHANGED_FILES
+      else
+        echo "No changed Python files detected in diff. Running full fallback check on current workspace..."
+        flake8 .
+      fi

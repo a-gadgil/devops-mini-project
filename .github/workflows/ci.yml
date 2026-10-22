@@ -1,0 +1,37 @@
+name: Python CI Pipeline
+
+# Trigger automatically when a Pull Request is opened or updated targeting main
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-code:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout the specific commit SHA of the Pull Request branch
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Set up the Python runtime environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip' # Speeds up dependency installation across runs
+
+      # 3. Run Static Code Analysis (Flake8)
+      - name: Run Flake8 Linter
+        run: |
+          pip install --upgrade pip
+          pip install flake8
+          # Run flake8 across the python project directory
+          flake8 .
+
+      # 4. Run Secret Scanning (Gitleaks Community Action)
+      - name: Run Gitleaks Secret Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
