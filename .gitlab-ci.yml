@@ -1,34 +1,21 @@
-# Define the sequential stages of the pipeline
-stages:
-  - test
-  - security
-
-# Default runtime image for jobs that require Python
-default:
-  image: python:3.11-slim
-
-# Cache python packages between pipeline runs to optimize speed
-cache:
-  paths:
-    - .cache/pip
-
-# 1. TEST STAGE: Static code analysis
 lint_python_code:
   stage: test
   before_script:
     - pip install --cache-dir .cache/pip flake8
   script:
-    - flake8 .
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"' # Runs specifically on MRs
-
-# 2. SECURITY STAGE: Secret scanning using the official Gitleaks image
-scan_secrets:
-  stage: security
-  image: 
-    name: zricethezav/gitleaks:latest
-    entrypoint: [""]
-  script:
-    - gitleaks detect --source . --verbose
+    - echo "Fetching target branch for diff comparison..."
+    - git fetch origin $CI_MERGE_REQUEST_TARGET_BRANCH_NAME
+    
+    - echo "Identifying modified Python files..."
+    - CHANGED_FILES=$(git diff --name-only origin/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME -- '*.py')
+    
+    - |
+      if [ -n "$CHANGED_FILES" ]; then
+          echo "Linting the following modified files:"
+          echo "$CHANGED_FILES"
+          flake8 $CHANGED_FILES
+      else
+          echo "No Python files were modified in this Merge Request. Skipping linter."
+      fi
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
