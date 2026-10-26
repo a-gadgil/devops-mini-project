@@ -1,25 +1,27 @@
-def calculate_discount(order_value):
-    # Determine the discount rate based on order value
-    if order_value > 3000:
-        discount_rate = 0.25
-    elif 1001 <= order_value <= 3000:
-        discount_rate = 0.15
-    elif order_value == 1000:
-        discount_rate = 0.10
-    else:
-        discount_rate = 0.0  # 0% discount for orders under 1000
-
-    discount_amount = order_value * discount_rate
-    final_price = order_value - discount_amount
+def check_makemytrip_reward(monthly_spend):
+    """
+    Determines if a customer qualifies for a Rs 500 MakeMyTrip coupon 
+    based on their total monthly shopping amount (> 15000 Rs).
+    """
+    THRESHOLD = 15000
+    COUPON_VALUE = 500
     
-    return {
-        "order_value": order_value,
-        "discount_rate": f"{int(discount_rate * 100)}%",
-        "discount_amount": discount_amount,
-        "final_price": final_price
-    }
+    if monthly_spend > THRESHOLD:
+        return {
+            "qualified": True,
+            "monthly_spend": monthly_spend,
+            "reward": f"MakeMyTrip Rs {COUPON_VALUE} Coupon",
+            "message": f"Congratulations! You unlocked a Rs {COUPON_VALUE} MakeMyTrip coupon."
+        }
+    else:
+        shortfall = THRESHOLD - monthly_spend
+        return {
+            "qualified": False,
+            "monthly_spend": monthly_spend,
+            "amount_needed": shortfall,
+            "message": f"Spend Rs {shortfall} more this month to unlock your MakeMyTrip coupon."
+        }
 
 # --- Example Usage ---
-print(calculate_discount(1000))   # 10% discount
-print(calculate_discount(2500))   # 15% discount
-print(calculate_discount(3500))   # 25% discount
+print(check_makemytrip_reward(12000))  # Customer hasn't reached the threshold yet
+print(check_makemytrip_reward(17500))  # Customer qualifies
