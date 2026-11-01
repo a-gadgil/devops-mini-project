@@ -29,9 +29,11 @@ def calculate_taxi_fare(
 
 # Example Usage:
 # 12.5 km trip, at 8 PM (rush hour), under high demand
-fare = calculate_taxi_fare(distance_km=12.5, time_of_day_hour=20, demand_level="high")
+fare = calculate_taxi_fare(
+    distance_km=12.5,
+    time_of_day_hour=20,
+    demand_level="high")
 print(f"Total Fare: ₹{fare}")  # Output: ₹417.6
-
 
 
 # End of file

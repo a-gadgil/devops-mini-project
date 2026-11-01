@@ -1,5 +1,6 @@
 THRESHOLD = 100.0  # Rs. 100 limit
 
+
 def send_push_notification(user_id: str, balance: float):
     """Mock function representing your FCM/APNs push notification service."""
     payload = {
@@ -17,9 +18,11 @@ def process_transaction(user_account: dict, new_balance: float):
     user_account["balance"] = new_balance
 
     # Trigger push if balance drops below 100 AND user hasn't been notified yet
-    if new_balance < THRESHOLD and not user_account.get("low_balance_notified", False):
+    if new_balance < THRESHOLD and not user_account.get(
+            "low_balance_notified", False):
         send_push_notification(user_account["user_id"], new_balance)
-        user_account["low_balance_notified"] = True  # Prevent spamming on next transaction
+        # Prevent spamming on next transaction
+        user_account["low_balance_notified"] = True
 
     # Reset the flag if the user tops up above 100 Rs.
     elif new_balance >= THRESHOLD and user_account.get("low_balance_notified", False):
@@ -36,7 +39,8 @@ user = {
 # 1. Spent Rs. 180 (Balance: 70 -> Below threshold)
 process_transaction(user, 70.0)
 
-# 2. Spent Rs. 20 (Balance: 50 -> Still below, but alert flag prevents duplicate push)
+# 2. Spent Rs. 20 (Balance: 50 -> Still below, but alert flag prevents
+# duplicate push)
 process_transaction(user, 50.0)
 
 # 3. Top-up Rs. 100 (Balance: 150 -> Resets notification flag)

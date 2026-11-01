@@ -14,7 +14,8 @@ class StockStatus(str, Enum):
 class StockCheckRequest(BaseModel):
     product_id: str
     dark_store_id: str  # Fast delivery relies on local dark store stock
-    requested_quantity: int = Field(gt=0, description="Quantity must be at least 1")
+    requested_quantity: int = Field(
+        gt=0, description="Quantity must be at least 1")
 
 
 class StockCheckResponse(BaseModel):

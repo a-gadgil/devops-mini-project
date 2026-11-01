@@ -69,11 +69,13 @@ HTML_TEMPLATE = """
 </html>
 """
 
+
 @app.route("/")
 def home():
     hostname = socket.gethostname()
     env = os.getenv("APP_ENV", "production")
     return render_template_string(HTML_TEMPLATE, hostname=hostname, env=env)
+
 
 @app.route("/api/v1/status")
 def status():
@@ -84,9 +86,12 @@ def status():
     }), 200
 
 # Health check route for Docker / Kubernetes liveness probes
+
+
 @app.route("/health")
 def health():
     return jsonify({"status": "UP"}), 200
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

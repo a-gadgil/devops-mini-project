@@ -43,14 +43,17 @@ class CheckoutService:
         """Ensures cart is valid and items are available in stock."""
         if not cart.items:
             raise ValueError("Cart is empty.")
-        
+
         for item in cart.items:
             if not item.in_stock:
-                raise ValueError(f"Item '{item.name}' is currently out of stock.")
+                raise ValueError(
+                    f"Item '{
+                        item.name}' is currently out of stock.")
             if item.quantity <= 0:
                 raise ValueError(f"Invalid quantity for '{item.name}'.")
 
-    def calculate_discount(self, subtotal: float, coupon_code: Optional[str]) -> float:
+    def calculate_discount(self, subtotal: float,
+                           coupon_code: Optional[str]) -> float:
         """Calculates discount based on applied coupon code."""
         if not coupon_code or coupon_code not in self.VALID_COUPONS:
             return 0.0
@@ -59,7 +62,8 @@ class CheckoutService:
         if isinstance(discount_rule, float) and discount_rule < 1.0:
             return subtotal * discount_rule  # Percentage discount
         elif isinstance(discount_rule, float):
-            return min(discount_rule, subtotal)  # Flat discount (capped at subtotal)
+            # Flat discount (capped at subtotal)
+            return min(discount_rule, subtotal)
         return 0.0
 
     def calculate_shipping(self, discounted_subtotal: float) -> float:
@@ -72,12 +76,13 @@ class CheckoutService:
         """Simulates payment gateway processing."""
         if amount <= 0:
             raise ValueError("Payment amount must be greater than zero.")
-        
+
         # Payment integration logic would go here (e.g., Stripe, Razorpay)
         print(f"Processing payment of ₹{amount:.2f} via {method.value}...")
         return True  # Simulating a successful transaction
 
-    def checkout(self, cart: Cart, shipping_address: str, payment_method: PaymentMethod) -> dict:
+    def checkout(self, cart: Cart, shipping_address: str,
+                 payment_method: PaymentMethod) -> dict:
         """Executes the complete checkout flow."""
         # 1. Validation
         if not shipping_address.strip():
@@ -119,7 +124,7 @@ if __name__ == "__main__":
         Item(item_id="101", name="Wireless Mouse", price=450.0, quantity=1),
         Item(item_id="102", name="USB Cable", price=150.0, quantity=2),
     ]
-    
+
     user_cart = Cart(items=cart_items, coupon_code="WELCOME10")
     checkout_system = CheckoutService()
 

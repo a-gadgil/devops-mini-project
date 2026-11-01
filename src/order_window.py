@@ -1,5 +1,6 @@
 import time
 
+
 class OrderManager:
     def __init__(self, order_id, initial_items):
         self.order_id = order_id
@@ -15,17 +16,26 @@ class OrderManager:
         if elapsed_time <= self.window_limit:
             self.items.append(product_name)
             remaining_time = int(self.window_limit - elapsed_time)
-            print(f"✅ Success! Added '{product_name}' to Order #{self.order_id}.")
-            print(f"   ({remaining_time} seconds remaining in the edit window.)")
+            print(
+                f"✅ Success! Added '{product_name}' to Order #{
+                    self.order_id}.")
+            print(
+                f"   ({remaining_time} seconds remaining in the window.)")
             return True
         else:
-            print(f"❌ Could not add '{product_name}'. The 45-second modification window has expired.")
+            print(f"❌ Could not add '{
+                  product_name}'. The 45-second modification window has elapsed.")
             return False
+
 
 # --- Example Usage ---
 if __name__ == "__main__":
     # 1. Order is placed successfully
-    my_order = OrderManager(order_id="ORD-5092", initial_items=["Pizza", "Coke"])
+    my_order = OrderManager(
+        order_id="ORD-5092",
+        initial_items=[
+            "Pizza",
+            "Coke"])
     print(f"Order placed with items: {my_order.items}\n")
 
     # 2. User tries adding an item immediately (within window)

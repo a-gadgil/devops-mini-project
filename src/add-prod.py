@@ -19,14 +19,17 @@ new_product = {
 }
 
 # Logic to add the product safely
+
+
 def add_product_to_category(catalog_data, category_key, product):
     categories = catalog_data.get("categories", {})
-    
+
     if category_key in categories:
         categories[category_key]["products"].append(product)
         print(f"Successfully added '{product['name']}' to '{category_key}'.")
     else:
         print(f"Error: Category '{category_key}' does not exist.")
+
 
 # Execute
 add_product_to_category(catalog, "detergent category", new_product)

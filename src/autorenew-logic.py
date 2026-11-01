@@ -25,7 +25,8 @@ def process_gold_auto_renewal(user_id, account_balance, has_digital_consent):
     # Step 3: Deduct payment and compute new expiration date
     new_balance = account_balance - RENEWAL_FEE
     current_time = datetime.now()
-    new_expiry_date = current_time + relativedelta(months=RENEWAL_PERIOD_MONTHS)
+    new_expiry_date = current_time + \
+        relativedelta(months=RENEWAL_PERIOD_MONTHS)
 
     return {
         "status": "SUCCESS",

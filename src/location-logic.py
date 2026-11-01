@@ -47,7 +47,8 @@ def get_country_from_ip(ip_address: str) -> Optional[dict]:
                 "country_name": data.get("country_name"),
             }
         logger.warning(
-            f"Geolocation API returned HTTP {response.status_code} for IP {ip_address}"
+            f"Geolocation API returned HTTP {
+                response.status_code} for IP {ip_address}"
         )
         return None
     except requests.RequestException as err:
@@ -103,7 +104,8 @@ def register_user(
 
     # Proceed with account creation logic
     logger.info(
-        f"User '{user_data.username}' registered successfully from IP {client_ip} ({country_name})."
+        f"User '{user_data.username}' registered successfully from IP {
+            client_ip} ({country_name})."
     )
 
     return RegistrationResponse(

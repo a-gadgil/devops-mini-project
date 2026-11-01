@@ -1,11 +1,11 @@
 def check_makemytrip_reward(monthly_spend):
     """
-    Determines if a customer qualifies for a Rs 500 MakeMyTrip coupon 
+    Determines if a customer qualifies for a Rs 500 MakeMyTrip coupon
     based on their total monthly shopping amount (> 15000 Rs).
     """
     THRESHOLD = 15000
     COUPON_VALUE = 500
-    
+
     if monthly_spend > THRESHOLD:
         return {
             "qualified": True,
@@ -22,6 +22,8 @@ def check_makemytrip_reward(monthly_spend):
             "message": f"Spend Rs {shortfall} more this month to unlock your MakeMyTrip coupon."
         }
 
+
 # --- Example Usage ---
-print(check_makemytrip_reward(12000))  # Customer hasn't reached the threshold yet
+# Customer hasn't reached the threshold yet
+print(check_makemytrip_reward(12000))
 print(check_makemytrip_reward(17500))  # Customer qualifies

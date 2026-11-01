@@ -14,7 +14,8 @@ def validate_account_creation(dob: date) -> bool:
 
     if age < 18:
         raise ValueError(
-            f"Account creation denied. User is {age} years old (minimum age required is 18)."
+            f"Account creation denied. User is {
+                age} years old (minimum age required is 18)."
         )
 
     return True
