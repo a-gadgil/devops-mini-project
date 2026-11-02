@@ -4,10 +4,9 @@ THRESHOLD = 100.0  # Rs. 100 limit
 def send_push_notification(user_id: str, balance: float):
     """Mock function representing your FCM/APNs push notification service."""
     payload = {
-        "title": "Low Balance Alert",
-        "body": f"Your account balance is Rs. {balance:.2f}, which is below Rs. {THRESHOLD}. Please recharge.",
-        "data": {"type": "LOW_BALANCE_ALERT"}
-    }
+        "title": "Low Balance Alert", "body": f"Your account balance is Rs. {
+            balance:.2f}, which is below Rs. {THRESHOLD}. Please recharge.", "data": {
+            "type": "LOW_BALANCE_ALERT"}}
     print(f"[PUSH SENT to {user_id}]: {payload['body']}")
 
 
