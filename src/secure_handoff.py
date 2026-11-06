@@ -50,7 +50,7 @@ class SecureDeliveryVerification:
             print("Error: OTP has expired. Please request a new one.")
             return False
             
-        if delivery_record["otp'] == entered_otp:
+        if delivery_record["otp"] == entered_otp:
             delivery_record["verified"] = True
             print("Success: Delivery verified successfully!")
             return True
